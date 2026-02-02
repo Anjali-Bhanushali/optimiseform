@@ -3,42 +3,51 @@ import { ToastContainer, toast } from "react-toastify";
 import User from "./components/user";
 
 const App = () => {
-  const [fullName, setfullName] = useState("");
-  const [email, setemail] = useState("");
-  const [password, setpassword] = useState("");
-  const [confirmpassword, setconfirmpassword] = useState("");
-  const [error, setError] = useState("");
+  
+  const [formdata, setformdata] = useState({
+    fullName:'',
+    email:'',
+    password:'',
+    confirmpassword:''
+  })
 
   const [users, setusers] = useState([]);
+
+  const handleChanges = ()=>{
+    // destructuring
+
+    const {name,value} = e.target
+
+    setformdata({
+      [name]:value
+    })
+  }
 
   const submitHandler = (e) => {
     e.preventDefault();
     console.log(fullName, email, password, confirmpassword);
 
-    if (password.length < 8) {
+    if (formdata.password.length < 8) {
       setError("Password must be 8 character long");
       return;
     }
-    if (password != confirmpassword) {
+    if (formdata.password !== formdata.confirmpassword) {
       setError("Password and confirmpassword must same");
       return;
     }
-    if (!/[!@#$%^&*<>,.]/.test(password)) {
+    if (!/[!@#$%^&*<>,.]/.test(formdata.password)) {
       setError("password must contains any special character");
       return;
     }
-    if (!/[A-Z]/.test(password)) {
+    if (!/[A-Z]/.test(formdata.password)) {
       setError("password must contains any capital letter");
       return;
     }
 
-    setusers([...users,{fullName,email,password}])
+    setusers([...users,formdata])
 
     setError("");
-    setfullName("");
-    setemail("");
-    setpassword("");
-    setconfirmpassword("");
+    
     toast.success('✅Login Successfull', {
       position: "top-right",
       autoClose: 3000,
@@ -70,10 +79,9 @@ const App = () => {
               placeholder="Enter your name"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               required
-              value={fullName}
-              onChange={(e) => {
-                setfullName(e.target.value);
-              }}
+              name='fullName'
+              value={formdata.fullName}
+              onChange={handleChanges}
             />
           </div>
 
@@ -84,10 +92,9 @@ const App = () => {
               placeholder="Enter your email"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               required
-              value={email}
-              onChange={(e) => {
-                setemail(e.target.value);
-              }}
+              name='email'
+              value={formdata.email}
+              onChange={handleChanges}
             />
           </div>
 
@@ -98,10 +105,9 @@ const App = () => {
               placeholder="Enter password"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               required
-              value={password}
-              onChange={(e) => {
-                setpassword(e.target.value);
-              }}
+              name='password'
+              value={formdata.password}
+              onChange={handleChanges}
             />
           </div>
 
@@ -112,10 +118,9 @@ const App = () => {
               placeholder="Confirm password"
               className="w-full border border-gray-300 rounded-lg px-4 py-2 mt-1 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               required
-              value={confirmpassword}
-              onChange={(e) => {
-                setconfirmpassword(e.target.value);
-              }}
+              name='confirmpassword'
+              value={formdata.confirmpassword}
+              onChange={handleChanges}
             />
           </div>
 
