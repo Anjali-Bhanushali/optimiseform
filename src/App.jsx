@@ -12,20 +12,22 @@ const App = () => {
   })
 
   const [users, setusers] = useState([]);
+  const [error, setError] = useState('');
 
-  const handleChanges = ()=>{
+  const handleChanges = (e)=>{
     // destructuring
 
     const {name,value} = e.target
 
-    setformdata({
+    setformdata((prevData)=>({
+      ...prevData,
       [name]:value
-    })
+    }))
   }
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(fullName, email, password, confirmpassword);
+    console.log(formdata.fullName, formdata.email, formdata.password, formdata.confirmpassword);
 
     if (formdata.password.length < 8) {
       setError("Password must be 8 character long");
@@ -44,9 +46,21 @@ const App = () => {
       return;
     }
 
-    setusers([...users,formdata])
+    setusers((prevusers)=>[
+      ...prevusers,{
+        fullName:formdata.fullName,
+        email:formdata.email,
+        password:formdata.password
+      }
+    ])
 
     setError("");
+    setformdata({
+      fullName:'',
+      email:'',
+      password:'',
+      confirmpassword:''
+    })
     
     toast.success('✅Login Successfull', {
       position: "top-right",
@@ -145,8 +159,8 @@ const App = () => {
         
       </div>
 
-      {users.map(function(elem){
-        return <User elem={elem} />
+      {users.map(function(elem , idx){
+        return <User key={idx} elem={elem} />
       })}
     </div>
   );
